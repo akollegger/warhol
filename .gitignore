@@ -16,3 +16,9 @@ tmp
 .yardoc
 _yardoc
 doc/
+
+*/.DS_Store
+.DS_Store
+.sass-cache/
+Gemfile.lock
+
