@@ -1,0 +1,33 @@
+.logo {
+	  position: absolute;
+	  width: 170px;
+	  height: 210px;
+	  margin: 5px;
+	  padding: 10px;
+	  padding-left: 40px;
+	  padding-right: 20px;
+	  float: left;
+	  overflow: hidden;
+	  position: relative;
+	  background: #888;
+	  color: #222;
+	  -webkit-border-top-right-radius: 1.2em;
+	      -moz-border-radius-topright: 1.2em;
+	          border-top-right-radius: 1.2em;
+}
+
+.logo h2 {
+	width: 240px;
+	position: absolute;
+	display: none;
+	bottom: 0;
+	left: 0;
+	font: 12px "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+}
+
+.logo:hover h2 {
+	position: absolute;
+	display: inline;
+	background-color: rgba(255, 255, 255, 0.75);
+}
+

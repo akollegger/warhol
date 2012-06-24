@@ -1,0 +1,259 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  
+  <meta charset="utf-8" />
+  <title>Neo4j Warhol</title>
+  
+  <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/warhol.css" />
+  
+  <!-- scripts at bottom of page -->
+
+</head>
+<body class="homepage ">
+
+  <nav id="site-nav">  
+  
+    <h2>Neo4j Warhol</h2>
+      <section id="options" class="clearfix">
+      <div class="option-combo">
+        <ul id="filter" class="option-set clearfix" data-option-key="filter">
+          <li><a href="#show-all" data-option-value="*" class="selected">show all</a></li>
+          <li><a href="#elements" data-option-value=".mono">mono</a></li>
+          <li><a href="#features" data-option-value=".flag">flag</a></li>
+          <li><a href="#features" data-option-value=".sun">sun</a></li>
+        </ul>
+      </div>
+	    
+	    <div class="option-combo">
+	      <ul id="sort-by" class="option-set clearfix" data-option-key="sortBy">
+	        <li id="shuffle"><a href='#shuffle'>Shuffle</a></li>
+	      </ul>
+	    </div>
+	    
+    </section>    
+  </nav> 
+  
+  <section id="content">
+    
+
+  
+  <div id="container" class="super-list variable-sizes clearfix">
+    
+      
+  </div>
+  
+  
+  <script src="js/jquery-1.7.1.min.js"></script>
+  <script src="js/jquery.isotope.min.js"></script>
+  <script src="js/d3.v2.min.js"></script>
+  <script>
+  	var themes = [
+  		{"id":"original", "name":"Original", "background":"#134D5D", "node":"#C9FAA2", "outline":"#91B6C1", "relationship":"white", "relout":"none", "swish":"#B3E871", "category":""}, 
+  		{"id":"black", "name":"Black Spot", "background":"white", "node":"black", "outline":"black", "relationship":"black", "relout":"none", "swish":"black", "category":"mono"}, 
+  		{"id":"white", "name":"White Spot", "background":"black", "node":"white", "outline":"white", "relationship":"white", "relout":"none", "swish":"white", "category":"mono"}, 
+  		{"id":"icey", "name":"Ice Cold", "background":"white", "node":"#ccdbe6", "outline":"#a0c3de", "relationship":"#bed5e6", "relout":"none", "swish":"#b1cfe6", "category":"mono"}, 
+  		{"id":"swedish", "name":"Swedish", "background":"white", "node":"#2666d5", "outline":"#2666d5", "relationship":"#ffd92e", "relout":"#2666d5", "swish":"#ffd92e", "category":"flag"}, 
+  		{"id":"american", "name":"American", "background":"white", "node":"#1d3468", "outline":"#a3101f", "relationship":"white", "relout":"#16126e", "swish":"white", "category":"flag"}, 
+  		{"id":"neon", "name":"Neon", "background":"#fdff30", "node":"#f923c0", "outline":"#70f923", 
+  			"relationship":"#ff8100", "relout":"none", "swish":"#30f8ff", "category":""}, 
+		{"id":"sunrise", "name":"Sunrise", "background":"#87cefa", "node":"#fad000", "outline":"#eb7f00", 
+			"relationship":"#ff4907", "relout":"none", "swish":"#f5aa00", "category":"sun"}, 
+		{"id":"sunset", "name":"Sunset", "background":"#e8c7b1", "node":"#310818", "outline":"#e8b1b1", 
+			"relationship":"#953656", "relout":"none", "swish":"#d16362", "category":"sun"},
+		{"id":"midday", "name":"Midday", "background":"#87cefa", "node":"#fdf956", "outline":"#fa8032", 
+			"relationship":"white", "relout":"#33b1f3", "swish":"#fcd44b", "category":"sun"},
+		{"id":"benno", "name":"Benno", "background":"#66655d", "node":"#39485d", "outline":"#3c4144", 
+			"relationship":"#3c4144", "relout":"none", "swish":"#121d2b", "category":"art"},
+		{"id":"cutout", "name":"Cut Out", "background":"white", "node":"#ededed", "outline":"black", 
+			"relationship":"#bababa", "relout":"black", "swish":"#bababa", "category":"mono"},
+		{"id":"ruby", "name":"Ruby", "background":"white", "node":"#b00606", "outline":"b00606", 
+			"relationship":"#e00909", "relout":"b00606", "swish":"#e00909", "category":"mono"},
+		{"id":"eco", "name":"Eco", "background":"#986526", "node":"#c3d882", "outline":"#6caf5d", 
+			"relationship":"#49af33", "relout":"328421", "swish":"#9ac363", "category":""}
+  	];
+  	
+  	var nodeSpecs = [ 
+  		[ 126.63533, 458.75377, 32.365616 ],
+		[ 83.1024, 526.604, 26.895987 ],
+		[ 62.714058, 425.21415, 18.714163 ]
+  	];
+  	
+  	var relSpecs = [ 
+  		[91.557016, 419.69959, 5.0627656],
+	  	[104.57301, 424.03876, 5.0627656],
+  		[55.755746, 452.9697, 5.0627656],
+	  	[55.755746, 467.07017, 5.0627656],
+  		[58.64808, 482.62043, 5.0627656],
+  		[65.87916, 495.63926, 5.0627656],
+  		[118.67652, 512.63624, 5.0627656],
+	  	[127.35705, 501.78556, 5.0627656]
+  	];
+  	
+  	var swishSpec = [
+  		"M 154.176255 441.73914 C 152.88412 439.65159 151.33242 437.67907 149.52118 435.86783 C 136.88167 423.2282 116.389024 423.2282 103.74953 435.86783 C 91.109954 448.5074 91.109954 469.00014 103.74953 481.63973 C 104.89654 482.78674 106.10819 483.82966 107.37279 484.7685 C 99.64778 472.28827 101.199466 455.69617 112.027814 444.86783 C 123.520325 433.3752 141.50541 432.33227 154.176255 441.73912 Z",
+  		"M 78.487866 415.67724 C 77.757474 414.49723 76.880363 413.38225 75.85654 412.35843 C 68.711946 405.21376 57.128294 405.21376 49.983707 412.35843 C 42.839072 419.50306 42.839072 431.08677 49.983707 438.2314 C 50.632064 438.87977 51.316962 439.46929 52.031788 439.99997 C 47.665157 432.94542 48.54226 423.56658 54.66308 417.44576 C 61.159326 410.94944 71.32556 410.35992 78.487866 415.67723 Z",
+  		"M 104.91025 512.99637 C 103.88164 511.33458 102.64641 509.76435 101.20457 508.3225 C 91.142876 498.26072 74.829684 498.26072 64.768004 508.3225 C 54.706255 518.38425 54.706255 534.69752 64.768004 544.75928 C 65.68108 545.67236 66.64562 546.50258 67.652304 547.24994 C 61.502802 537.31505 62.73802 524.1069 71.35794 515.48697 C 80.506564 506.33824 94.82361 505.50803 104.91025 512.99636 Z"
+  	];
+  	
+  	var nodeOutlineSpecs = [
+	  	[83.102394, 526.604, 26.895992],
+ 	 	[126.63533, 458.75377, 32.365616],
+	  	[62.714058, 425.21415, 18.714163]
+  	];
+  	
+  	// first pass, creates missing divs	
+  	var tiles = d3.select("#container").selectAll("div").data(themes);
+  	
+  	tiles.enter().append("div")
+  			.attr("id", function(d) { return d.id; })
+			.attr("class", function(d) { return "logo " + d.category} )
+			.style("background", function(d) { return d.background });
+	
+	// add headers
+	tiles.append("h2")
+  			.text(function(d) { return d.name; })
+  				.attr("class", "name")
+  			;
+  			
+  	// add svg logos
+  	var logos = tiles.append("svg")
+  			.attr("viewBox", "41 403 122 154")
+  			.attr("width", "122pt")
+  			.attr("height", "154pt")
+  		.append("g")
+  			.attr("class","logo")
+  			.attr("stroke", "none")
+  			.attr("stroke-opacity", "1")
+  			.attr("stroke-dasharray", "none")
+  			.attr("fill-opacity", "1");
+  			
+  	// nodes
+  	var nodes = logos.selectAll("g circle.node").data(nodeSpecs).enter()
+  		.append("circle")
+  		.attr("class","node")
+  		.attr("cx", function(d) { return d[0]; })
+  		.attr("cy",function(d) { return d[1]; })
+  		.attr("r", function(d) { return d[2]; });
+  							  	
+  	
+  	// relationships
+  	var nodes = logos.selectAll("g circle.relationship").data(relSpecs).enter()
+  		.append("circle")
+  		.attr("class","relationship")
+  		.attr("cx", function(d) { return d[0]; })
+  		.attr("cy",function(d) { return d[1]; })
+  		.attr("r", function(d) { return d[2]; });
+  				  	
+	
+	// swish marks (node highlights)
+	var swishes = logos.selectAll("g path.swish").data(swishSpec).enter()
+		.append("path")
+		.attr("class","swish")
+		.attr("d", function(d) { return d; });
+		
+		
+	// node outlines
+	var nodeOutlines = logos.selectAll("g circle.node-outline").data(nodeOutlineSpecs).enter()
+		.append("circle")
+		.attr("class","node-outline")
+		.attr("stroke-linecap", "round")
+		.attr("stroke-linejoin","round")
+		.attr("stroke-width","3")
+		.attr("fill","none")
+		.attr("cx", function(d) { return d[0]; })
+		.attr("cy",function(d) { return d[1]; })
+		.attr("r", function(d) { return d[2]; });
+		
+	logos.each(function(dd) { 
+		d3.select(this).selectAll("circle.node")
+			.attr("fill", function(d) { console.log(dd); return dd.node; });
+		d3.select(this).selectAll("circle.node-outline")
+			.attr("stroke", function(d) { console.log(dd); return dd.outline; });
+		d3.select(this).selectAll("circle.relationship")
+			.attr("fill", function(d) { console.log(dd); return dd.relationship; })
+			.attr("stroke", function(d) { console.log(dd); return dd.relout; });
+		d3.select(this).selectAll("path.swish")
+			.attr("fill", function(d) { console.log(dd); return dd.swish; });
+	});
+		
+    $(function(){
+    
+      var $container = $('#container');
+    
+      $container.isotope({
+        masonry: {
+          columnWidth: 120,
+          rowHeight: 120
+        },
+        sortBy: 'random',
+        getSortData: {
+          number: function( $elem ) {
+            var number = $elem.hasClass('element') ? 
+              $elem.find('.number').text() :
+              $elem.attr('data-number');
+            return parseInt( number, 10 );
+          },
+          alphabetical: function( $elem ) {
+            var name = $elem.find('.name'),
+                itemText = name.length ? name : $elem;
+            return itemText.text();
+          }
+        }
+      });
+    
+              var $optionSets = $('#options .option-set'),
+                  $optionLinks = $optionSets.find('a');
+        
+              $optionLinks.click(function(){
+                var $this = $(this);
+                // don't proceed if already selected
+                if ( $this.hasClass('selected') ) {
+                  return false;
+                }
+                var $optionSet = $this.parents('.option-set');
+                $optionSet.find('.selected').removeClass('selected');
+                $this.addClass('selected');
+          
+                // make option object dynamically, i.e. { filter: '.my-filter-class' }
+                var options = {},
+                    key = $optionSet.attr('data-option-key'),
+                    value = $this.attr('data-option-value');
+                // parse 'false' as false boolean
+                value = value === 'false' ? false : value;
+                options[ key ] = value;
+                if ( key === 'layoutMode' && typeof changeLayoutMode === 'function' ) {
+                  // changes in layout modes need extra logic
+                  changeLayoutMode( $this, options )
+                } else {
+                  // otherwise, apply new options
+                  $container.isotope( options );
+                }
+                
+                return false;
+              });
+        
+    var $sortBy = $('#sort-by');
+    $('#shuffle a').click(function(){
+      $container.isotope('shuffle');
+      $sortBy.find('.selected').removeClass('selected');
+      $sortBy.find('[data-option-value="random"]').addClass('selected');
+      return false;
+    });
+    
+    });
+  </script>
+
+    
+    <footer>
+      Neo4j Warhol by <a href="http://twitter.com/akollegger">Andreas Kollegger</a> / <a href="http://neo4j.org">Neo4j</a>
+    </footer>
+    
+  </section> <!-- #content -->
+  
+
+</body>
+</html>
