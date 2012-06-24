@@ -20,4 +20,4 @@ doc/
 */.DS_Store
 .DS_Store
 .sass-cache/
-
+*.esproj/
