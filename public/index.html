@@ -25,6 +25,7 @@
           <li><a href="#elements" data-option-value=".mono">mono</a></li>
           <li><a href="#features" data-option-value=".flag">flag</a></li>
           <li><a href="#features" data-option-value=".sun">sun</a></li>
+          <li><a href="#features" data-option-value=".moon">moon</a></li>
         </ul>
       </div>
 	    
@@ -52,12 +53,18 @@
   <script src="js/d3.v2.min.js"></script>
   <script>
   	var themes = [
-  		{"id":"original", "name":"Original", "background":"#134D5D", "node":"#C9FAA2", "outline":"#91B6C1", "relationship":"white", "relout":"none", "swish":"#B3E871", "category":""}, 
-  		{"id":"black", "name":"Black Spot", "background":"white", "node":"black", "outline":"black", "relationship":"black", "relout":"none", "swish":"black", "category":"mono"}, 
-  		{"id":"white", "name":"White Spot", "background":"black", "node":"white", "outline":"white", "relationship":"white", "relout":"none", "swish":"white", "category":"mono"}, 
-  		{"id":"icey", "name":"Ice Cold", "background":"white", "node":"#ccdbe6", "outline":"#a0c3de", "relationship":"#bed5e6", "relout":"none", "swish":"#b1cfe6", "category":"mono"}, 
-  		{"id":"swedish", "name":"Swedish", "background":"white", "node":"#2666d5", "outline":"#2666d5", "relationship":"#ffd92e", "relout":"#2666d5", "swish":"#ffd92e", "category":"flag"}, 
-  		{"id":"american", "name":"American", "background":"white", "node":"#1d3468", "outline":"#a3101f", "relationship":"white", "relout":"#16126e", "swish":"white", "category":"flag"}, 
+  		{"id":"original", "name":"Original", "background":"#134D5D", "node":"#C9FAA2", "outline":"#91B6C1", 
+  			"relationship":"white", "relout":"none", "swish":"#B3E871", "category":""}, 
+  		{"id":"black", "name":"Black Spot", "background":"white", "node":"black", "outline":"black", 
+  			"relationship":"black", "relout":"none", "swish":"black", "category":"mono"}, 
+  		{"id":"white", "name":"White Spot", "background":"black", "node":"white", "outline":"white", 
+  			"relationship":"white", "relout":"none", "swish":"white", "category":"mono"}, 
+  		{"id":"icey", "name":"Ice Cold", "background":"white", "node":"#ccdbe6", "outline":"#a0c3de", 
+  			"relationship":"#bed5e6", "relout":"none", "swish":"#b1cfe6", "category":"mono"}, 
+  		{"id":"swedish", "name":"Swedish", "background":"white", "node":"#2666d5", "outline":"#2666d5", 
+  			"relationship":"#ffd92e", "relout":"#2666d5", "swish":"#ffd92e", "category":"flag"}, 
+  		{"id":"american", "name":"American", "background":"white", "node":"#1d3468", "outline":"#a3101f", 
+  			"relationship":"white", "relout":"#16126e", "swish":"white", "category":"flag"}, 
   		{"id":"neon", "name":"Neon", "background":"#fdff30", "node":"#f923c0", "outline":"#70f923", 
   			"relationship":"#ff8100", "relout":"none", "swish":"#30f8ff", "category":""}, 
 		{"id":"sunrise", "name":"Sunrise", "background":"#87cefa", "node":"#fad000", "outline":"#eb7f00", 
@@ -79,38 +86,40 @@
 		{"id":"cateye", "name":"Cat\'s Eye", "background":"#444641", "node":"#beec44", "outline":"#deec44", 
 			"relationship":"#deec44", "relout":"none", "swish":"#161d15", "category":""}, 
 		{"id":"bluemoon", "name":"Blue Moon", "background":"black", "node":"#1e272f", "outline":"none", 
-			"relationship":"#8298a9", "relout":"none", "swish":"#92bee0", "category":"mono"},
+			"relationship":"#8298a9", "relout":"none", "swish":"#92bee0", "category":"moon"},
 		{"id":"par3", "name":"Par 3", "background":"#78a934", "node":"#1d3803", "outline":"#527a20", 
-			"relationship":"#527a20", "relout":"none", "swish":"#0a1a08", "category":"mono"},
+			"relationship":"#527a20", "relout":"none", "swish":"#0a1a08", "category":"mono"}, 
+		{"id":"neonmooon", "name":"Neon Moon", "background":"black", "node":"#black", "outline":"none", 
+			"relationship":"#fdff30", "relout":"none", "swish":"#70f923", "category":"moon"}
   	];
   	
   	var nodeSpecs = [ 
-  		[ 126.63533, 458.75377, 32.365616 ],
-		[ 83.1024, 526.604, 26.895987 ],
-		[ 62.714058, 425.21415, 18.714163 ]
+  		[ 129.63533, 84.374286, 32.365616 ],
+  		[ 62.714058, 50.834676, 18.714163 ],
+  		[ 83.102398, 152.22447, 26.895987 ]
   	];
   	
   	var relSpecs = [ 
-  		[91.557016, 419.69959, 5.0627656],
-	  	[104.57301, 424.03876, 5.0627656],
-  		[55.755746, 452.9697, 5.0627656],
-	  	[55.755746, 467.07017, 5.0627656],
-  		[58.64808, 482.62043, 5.0627656],
-  		[65.87916, 495.63926, 5.0627656],
-  		[118.67652, 512.63624, 5.0627656],
-	  	[127.35705, 501.78556, 5.0627656]
+  		[91.557016, 45.320086, 5.0627656],
+	  	[104.57301, 49.659258, 5.0627656],
+  		[55.755746, 78.59023, 5.0627656],
+	  	[55.755746, 92.690676, 5.0627656],
+  		[58.64808, 108.24096, 5.0627656],
+  		[65.87916, 121.25976, 5.0627656],
+  		[118.67652, 138.25673, 5.0627656],
+	  	[127.35707, 127.40609, 5.0627656]
   	];
   	
   	var swishSpec = [
-  		"M 154.176255 441.73914 C 152.88412 439.65159 151.33242 437.67907 149.52118 435.86783 C 136.88167 423.2282 116.389024 423.2282 103.74953 435.86783 C 91.109954 448.5074 91.109954 469.00014 103.74953 481.63973 C 104.89654 482.78674 106.10819 483.82966 107.37279 484.7685 C 99.64778 472.28827 101.199466 455.69617 112.027814 444.86783 C 123.520325 433.3752 141.50541 432.33227 154.176255 441.73912 Z",
-  		"M 78.487866 415.67724 C 77.757474 414.49723 76.880363 413.38225 75.85654 412.35843 C 68.711946 405.21376 57.128294 405.21376 49.983707 412.35843 C 42.839072 419.50306 42.839072 431.08677 49.983707 438.2314 C 50.632064 438.87977 51.316962 439.46929 52.031788 439.99997 C 47.665157 432.94542 48.54226 423.56658 54.66308 417.44576 C 61.159326 410.94944 71.32556 410.35992 78.487866 415.67723 Z",
-  		"M 104.91025 512.99637 C 103.88164 511.33458 102.64641 509.76435 101.20457 508.3225 C 91.142876 498.26072 74.829684 498.26072 64.768004 508.3225 C 54.706255 518.38425 54.706255 534.69752 64.768004 544.75928 C 65.68108 545.67236 66.64562 546.50258 67.652304 547.24994 C 61.502802 537.31505 62.73802 524.1069 71.35794 515.48697 C 80.506564 506.33824 94.82361 505.50803 104.91025 512.99636 Z"
+  		"M 157.176255 67.359654 C 155.88412 65.2721 154.33242 63.29959 152.52118 61.488342 C 139.88167 48.84871 119.389024 48.84871 106.74953 61.488342 C 94.109954 74.127904 94.109954 94.620657 106.74953 107.260246 C 107.89654 108.40725 109.10819 109.45017 110.37279 110.38901 C 102.64778 97.90879 104.199466 81.316687 115.027814 70.488345 C 126.520325 58.995706 144.50541 57.952786 157.176255 67.35964 Z",
+  		"M 78.48786 41.29777 C 77.75747 40.117761 76.88036 39.00278 75.856537 37.978957 C 68.711942 30.834292 57.12829 30.834292 49.983703 37.978957 C 42.839068 45.123583 42.839068 56.707297 49.983703 63.85194 C 50.63206 64.500294 51.316958 65.089815 52.031784 65.6205 C 47.665153 58.565944 48.542256 49.187108 54.663076 43.06629 C 61.159322 36.569972 71.325554 35.980452 78.48786 41.297761 Z",
+  		"M 104.91025 138.61693 C 103.88164 136.955135 102.64641 135.384915 101.20457 133.94307 C 91.142876 123.88128 74.829684 123.88128 64.768004 133.94307 C 54.706255 144.00481 54.706255 160.31808 64.768004 170.37984 C 65.68108 171.29292 66.64562 172.12314 67.652304 172.8705 C 61.502802 162.93561 62.73802 149.727445 71.35794 141.10753 C 80.506564 131.958805 94.82361 131.12859 104.91025 138.61692 Z"
   	];
   	
   	var nodeOutlineSpecs = [
-	  	[83.102394, 526.604, 26.895992],
- 	 	[126.63533, 458.75377, 32.365616],
-	  	[62.714058, 425.21415, 18.714163]
+  	  [129.63533, 84.374286, 32.365616],
+	  	[62.714058, 50.834676, 18.714163],
+	  	[83.102394, 152.22448, 26.895992]
   	];
   	
   	// first pass, creates missing divs	
@@ -129,8 +138,8 @@
   			
   	// add svg logos
   	var logos = tiles.append("svg")
-  			.attr("viewBox", "41 403 122 154")
-  			.attr("width", "122pt")
+  			.attr("viewBox", "41 29 125 154")
+  			.attr("width", "125pt")
   			.attr("height", "154pt")
   		.append("g")
   			.attr("class","logo")
