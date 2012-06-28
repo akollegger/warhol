@@ -27,6 +27,7 @@
           <li><a href="#features" data-option-value=".sun">sun</a></li>
           <li><a href="#features" data-option-value=".moon">moon</a></li>
           <li><a href="#features" data-option-value=".flower">flower</a></li>
+          <li><a href="#features" data-option-value=".face">face</a></li>
         </ul>
       </div>
 	    
@@ -97,7 +98,9 @@
 		{"id":"german", "name":"German", "background":"white", "node":"black", "outline":"#f0e712", 
 			"relationship":"black", "relout":"none", "swish":"#f10808", "category":"flag"}, 
 		{"id":"sunflower", "name":"Sunflower", "background":"#87cefa", "node":"#a1550a", "outline":"#fcc417", 
-			"relationship":"#c1af59", "relout":"none", "swish":"#c87a0b", "category":"flower"}
+			"relationship":"#c1af59", "relout":"none", "swish":"#c87a0b", "category":"flower"}, 
+		{"id":"abk", "name":"ABK", "background":"#87cefa", "node":"url(#img1)", "outline":"#fcc417", 
+			"relationship":"#c1af59", "relout":"none", "swish":"none", "category":"face"}
   	];
   	
   	var nodeSpecs = [ 
@@ -144,11 +147,25 @@
   			;
   			
   	// add svg logos
-  	var logos = tiles.append("svg")
+  	var svg = tiles.append("svg")
   			.attr("viewBox", "41 29 125 154")
   			.attr("width", "125pt")
   			.attr("height", "154pt")
-  		.append("g")
+  			
+  	var defs = svg.append("defs")
+  	    .append("pattern")
+  	    .attr("id", "img1")
+  	    .attr("patternUnits","objectBoundingBox")
+  	    .attr("width","90")
+  	    .attr("height","90")
+  	      .append("image")
+  	        .attr("xlink:href","images/faces/abk.jpg")
+  	        .attr("x", "0")
+  	        .attr("y", "0")
+  	        .attr("width", "64")
+  	        .attr("height", "64")
+  	          	    
+  	var logos = svg.append("g")
   			.attr("class","logo")
   			.attr("stroke", "none")
   			.attr("stroke-opacity", "1")
