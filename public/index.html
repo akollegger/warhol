@@ -99,7 +99,7 @@
 			"relationship":"black", "relout":"none", "swish":"#f10808", "category":"flag"}, 
 		{"id":"sunflower", "name":"Sunflower", "background":"#87cefa", "node":"#a1550a", "outline":"#fcc417", 
 			"relationship":"#c1af59", "relout":"none", "swish":"#c87a0b", "category":"flower"}, 
-		{"id":"abk", "name":"ABK", "background":"#87cefa", "node":"url(#img1)", "outline":"#fcc417", 
+		{"id":"abk", "name":"ABK", "backgroundImage":"url(images/backgrounds/linen-white.jpg)", "node":"url(#img1)", "outline":"black", 
 			"relationship":"#c1af59", "relout":"none", "swish":"none", "category":"face"}
   	];
   	
@@ -138,7 +138,8 @@
   	tiles.enter().append("div")
   			.attr("id", function(d) { return d.id; })
 			.attr("class", function(d) { return "logo " + d.category} )
-			.style("background", function(d) { return d.background });
+			.style("background", function(d) { return d.background || "none" })
+			.style("background-image", function(d) { return d.backgroundImage || "none" ; });
 	
 	// add headers
 	tiles.append("h2")
